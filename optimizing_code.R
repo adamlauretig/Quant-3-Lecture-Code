@@ -129,7 +129,7 @@ model_out_3 <- do.call(rbind, lapply(1:10000, boot_glm_c, data_to_use = iris))
 )
 
 # we can also use the data.table package, which is an incredibly fast 
-# version of data frame (I use it in a lot of my work)
+# version of data frame for huge datasets (I use it in a lot of my work)
 
 library(data.table)
 iris_dt <- as.data.table(iris)
@@ -142,4 +142,21 @@ boot_glm_dt <- function(j, data_to_use = iris_dt){
 }
 system.time(
 model_out_4 <-rbindlist(lapply(1:10000, boot_glm_dt, data_to_use = iris))
+)
+# Here, no performance gain, but we can use data.table to speed up & 
+# simplify calculating means and other grouped operations
+# calculate descriptives by species
+iris_dt[,.(mean(Sepal.Length), mean(Sepal.Width), mean(Petal.Length), 
+  mean(Petal.Width)), by = Species]
+
+# Finally, if we really need a speed boost, we can distribute a function to 
+# multiple cores, so that each core will only need to do a fraction of the iterations
+library(parallel) # mac/unix package
+# windows users, go here: https://stackoverflow.com/questions/23926334/how-do-i-parallelize-in-r-on-windows-example
+
+# get the number of cores to use with detectCores()
+detectCores()
+system.time(
+model_out_5 <- do.call(rbind, mclapply(1:10000, boot_glm_c, data_to_use = iris,
+  mc.cores = 4))
 )
