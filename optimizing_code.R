@@ -1,5 +1,6 @@
 # code for lecture/exercise in quant 3
 # improving and optimizing R code
+# Adam Lauretig, October 4, 2017
 rm(list = ls())
 options(stringsAsFactors = FALSE)
 seed_to_use <- 216
@@ -257,6 +258,14 @@ model_out_5 <- do.call(rbind, mclapply(1:10000, boot_glm_c,
 # Apply: apply the function you want to apply
 # Combine: at the end - put all the computations back together
 
-# Doing this in Caret: https://topepo.github.io/caret/parallel-processing.html
 
 # What if this isn't enough? Then, we go to the cluster
+
+# We can also use Rcpp-- calling c++ code in R
+## Eddelbuettel, book available as pdf from library
+## https://link.springer.com/book/10.1007%2F978-1-4614-6868-4
+
+### Other resources
+# Norman Matloff: Art of R programming
+# Hadley Wickham: Advanced R http://adv-r.had.co.nz/
+# Parallel processing in Caret: https://topepo.github.io/caret/parallel-processing.html
