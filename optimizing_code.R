@@ -1,6 +1,7 @@
 # code for lecture/exercise in quant 3
 # improving and optimizing R code
 # Adam Lauretig, October 4, 2017
+# posted at: https://github.com/adamlauretig/quant_3_code
 rm(list = ls())
 options(stringsAsFactors = FALSE)
 seed_to_use <- 216
@@ -16,8 +17,8 @@ vector_1 <- seq_len(100)
 a <- as.integer(1)
 a2 <- 1L
 # Numerics: Integers, plus decimals and negative numbers
-b <- as.numeric(1.1)
-b2 <- 1.1
+b <- as.numeric(1)
+b2 <- 1
 # character vectors: text values
 c <- as.character(1)
 c2 <- "1" 
@@ -28,6 +29,8 @@ str(a)
 str(b)
 str(c)
 
+# what is the default?
+str(1)
 # why does this matter?
 a <- as.integer(seq(from = 1, to = 1000000, by = 1))
 b <- as.numeric(seq(from = 1, to = 1000000, by = 1))
@@ -189,7 +192,7 @@ for(i in 1:10000){
 )
 # now, we'll write a function for bootstrapping
 boot_glm <- function(j, data_to_use = sample_data, form_to_use = formula1){
-  set.seed(i)
+  set.seed(j)
   df <- data_to_use[ sample.int(n = nrow(data_to_use), 
     size = nrow(data_to_use), replace = TRUE), ]
   m_boot <- lm(form_to_use, data = df)
@@ -232,7 +235,9 @@ model_out_4 <-rbindlist(lapply(1:10000, boot_glm_dt,
 # calculate descriptives by species from the iris data set
 data("iris")
 iris_dt <- data.table(iris)
-iris_dt[,.(SL = mean(Sepal.Length), SW = mean(Sepal.Width), PL = mean(Petal.Length), 
+iris_dt[,.(SL = mean(Sepal.Length), 
+  SW = mean(Sepal.Width), 
+  PL = mean(Petal.Length), 
   PW = mean(Petal.Width)), by = Species]
 
 # There's a very useful cheatsheet here: 
@@ -260,8 +265,9 @@ model_out_5 <- do.call(rbind, mclapply(1:10000, boot_glm_c,
 
 
 # What if this isn't enough? Then, we go to the cluster
+# here: https://github.com/adamlauretig/Unity_Intro
 
-# We can also use Rcpp-- calling c++ code in R
+# We can also use Rcpp-- calling c++ code in R (or other langugages)
 ## Eddelbuettel, book available as pdf from library
 ## https://link.springer.com/book/10.1007%2F978-1-4614-6868-4
 
